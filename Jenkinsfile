@@ -15,7 +15,7 @@ pipeline {
         timeout(time: 10, unit: 'MINUTES') 
         disableConcurrentBuilds()
     }
-    // This is build section
+
     stages {
         stage('Read Version') {
             steps {
@@ -32,6 +32,27 @@ pipeline {
                     sh """
                         npm install
                     """
+                }
+            }
+        }
+
+        stage('unit test'){
+            steps{
+                sh """ 
+                    npm test
+                """
+            }
+        }
+
+        stage('Sonar Scan'){
+            environment{
+                def sannerHome = tool 'sonar-8.0'
+            }
+            steps{
+                script{
+                withSonarQubeEnv('sonar-server') {
+                sh "${scannerHome}/bin/sonar-scanner"
+              }
                 }
             }
         }
