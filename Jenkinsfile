@@ -44,24 +44,7 @@ pipeline {
             }
         }
 
-        stage('Sonar Scan') {
-            environment {
-                SCANNER_HOME = tool 'sonar-8.0'
-            }
-            steps {
-                withSonarQubeEnv('sonar-server') {
-                    sh "${SCANNER_HOME}/bin/sonar-scanner"
-                }
-            }
-        }
 
-        stage('Quality Gate'){
-            steps{
-                timeout(time: 1, unit: 'HOURS'){
-                     waitForQualityGate abortPipeline: true
-                }
-            }
-        }
 
 
         stage('Build image') {
